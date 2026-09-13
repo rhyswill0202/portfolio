@@ -1,0 +1,1294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rhys Williams</title>
+<meta name="description" content="Rhys Williams. I design intuitive products and experiences through UX, research, and prototyping.">
+<meta name="theme-color" content="#08090B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   TOKENS  (change --accent to change the hover / string color)
+   ========================================================= */
+:root{
+  --bg:#08090B;
+  --text:#F3F2EE;
+  --body-text:rgba(243,242,238,.80);
+  --muted:rgba(243,242,238,.62);
+  --faint:rgba(243,242,238,.40);
+  --line:rgba(255,255,255,.12);
+  --accent:#FFB547;
+  --accent-rgb:255,181,71;
+  --high:#FF7A66;
+  --pad:clamp(20px,7vw,128px);
+  --max:1184px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  --display:'Cal Sans','Geist',system-ui,sans-serif;
+  --body:'Geist',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:
+    radial-gradient(1100px 620px at 50% -12%, rgba(var(--accent-rgb),.07), transparent 62%),
+    var(--bg);
+  background-attachment:fixed;
+  color:var(--text);font-family:var(--body);font-size:17px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;
+}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:inherit}
+ul,ol{list-style:none}
+::selection{background:rgba(var(--accent-rgb),.35)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:10px}
+.ico{width:18px;height:18px;flex:none}
+
+/* =========================================================
+   FROSTED GLASS  (applied to every button + interactive part)
+   ========================================================= */
+.glass{
+  position:relative;isolation:isolate;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.12);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);
+  backdrop-filter:blur(18px) saturate(150%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07);
+  transition:background .3s, border-color .3s, transform .45s var(--spring), color .25s, box-shadow .3s;
+}
+/* light that follows the mouse across glass */
+.glass::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;pointer-events:none;
+  background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.13), transparent 62%);
+  opacity:0;transition:opacity .35s;
+}
+.glass:hover::before{opacity:1}
+.glass:hover{border-color:rgba(255,255,255,.24)}
+
+/* =========================================================
+   NAV
+   ========================================================= */
+.nav{
+  position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:50;
+  height:60px;border-radius:30px;display:flex;align-items:center;gap:2px;padding:0 8px;
+  background:rgba(18,19,22,.45);
+}
+.nav:hover{transform:translateX(-50%)}
+.nav-logo{font-family:var(--display);font-size:19px;letter-spacing:.01em;width:44px;height:44px;border-radius:22px;display:grid;place-items:center;margin-right:4px;transition:color .25s, background .25s}
+.nav-logo:hover{color:var(--accent);background:rgba(255,255,255,.08)}
+.nav-links{position:relative;display:flex}
+.nav-link{position:relative;z-index:1;height:44px;padding:0 18px;border-radius:22px;display:flex;align-items:center;font-size:15px;font-weight:500;color:var(--muted);transition:color .25s}
+.nav-link:hover,.nav-link.is-active{color:var(--text)}
+.nav-ind{position:absolute;top:0;left:0;height:44px;width:0;border-radius:22px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);opacity:0;pointer-events:none;
+  transition:transform .5s var(--spring), width .5s var(--spring), opacity .25s}
+.nav-progress{position:absolute;left:26px;right:26px;bottom:4px;height:2px;border-radius:2px;background:var(--accent);transform-origin:left;transform:scaleX(var(--p,0));opacity:var(--po,0);transition:opacity .3s}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+.btn{display:inline-flex;align-items:center;gap:10px;height:52px;padding:0 24px;border-radius:26px;font-size:16px;font-weight:500;white-space:nowrap}
+.btn:hover{background:rgba(255,255,255,.1)}
+.btn:active{transform:scale(.97)}
+.btn-sm{height:42px;padding:0 18px;font-size:15px;border-radius:21px;gap:8px}
+.btn-solid{border-color:rgba(255,255,255,.5)}
+.btn-solid:hover,.next:hover .btn-solid{background:var(--text);color:#0A0A0B;border-color:var(--text)}
+.ico-arrow{transition:transform .45s var(--spring)}
+.btn:hover .ico-arrow,.card:hover .ico-arrow,.next:hover .ico-arrow{transform:translateX(4px)}
+.ico-back{transition:transform .45s var(--spring)}
+.btn:hover .ico-back{transform:translateX(-4px)}
+.btn-row{display:flex;flex-wrap:wrap;gap:12px}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;border-radius:17px;font-size:14px;color:var(--body-text)}
+.chip:hover{transform:translateY(-2px);color:var(--text)}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.chip.high .dot{background:var(--high)}
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+#app.enter{animation:enter .6s var(--ease)}
+@keyframes enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.wrap{width:100%;max-width:calc(var(--max) + var(--pad) * 2);margin:0 auto;padding:0 var(--pad)}
+.section{padding-top:128px}
+.h2{font-family:var(--display);font-weight:400;font-size:clamp(36px,4.4vw,48px);line-height:1.05}
+#projects,#contact{scroll-margin-top:100px}
+.page-top{padding-top:148px}
+.page-title{font-family:var(--display);font-weight:400;font-size:clamp(56px,8vw,96px);line-height:.95;outline:none}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero{position:relative;min-height:100vh;min-height:100svh;display:grid;place-items:center;text-align:center;padding:120px var(--pad) 110px;overflow:hidden}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
+.name{font-family:var(--display);font-weight:400;font-size:clamp(46px,11vw,140px);line-height:1;letter-spacing:-.005em;outline:none;cursor:default;user-select:none;-webkit-user-select:none}
+.name .w{display:inline-block;white-space:nowrap}
+.name .ch{
+  display:inline-block;will-change:transform;
+  transform:translateY(calc(var(--f,0) * -.1em)) scale(calc(1 + var(--f,0) * .2));
+  color:var(--text);
+  color:color-mix(in oklab, var(--accent) calc(var(--f,0) * 100%), var(--text));
+  transition:transform .55s var(--spring), color .35s ease;
+}
+.name .ci{display:inline-block;animation:rise .9s var(--ease) both;animation-delay:calc(var(--i) * 45ms + 250ms)}
+.name .ci.ready{animation:none}
+.name .ci.ready.pop{animation:pop .65s var(--spring)}
+@keyframes rise{from{opacity:0;transform:translateY(.4em)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:none}35%{transform:scale(1.24) translateY(-.07em)}70%{transform:scale(.96)}100%{transform:none}}
+.hero-sub{margin-top:26px;max-width:28ch;font-size:clamp(19px,2.3vw,28px);line-height:1.35;color:var(--muted);animation:rise .9s var(--ease) both .85s}
+.hero-cta{margin-top:40px;animation:rise .9s var(--ease) both 1s}
+.scroll-cue{position:absolute;left:50%;bottom:30px;width:1px;height:48px;transform:translateX(-50%);background:rgba(255,255,255,.12);overflow:hidden}
+.scroll-cue span{position:absolute;left:0;top:-40%;width:1px;height:40%;background:var(--text);animation:cue 2.4s var(--ease) infinite 1.6s}
+@keyframes cue{to{top:100%}}
+
+/* =========================================================
+   WORK CARDS
+   ========================================================= */
+.work-list{display:grid;gap:40px;margin-top:48px}
+.card{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:40px;align-items:center;padding:14px;border-radius:26px}
+.card:hover{transform:translateY(-4px);background:rgba(255,255,255,.075)}
+.card-media{border-radius:16px;overflow:hidden;aspect-ratio:16/10;background:#15161A}
+.card-media img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.card:hover .card-media img{transform:scale(1.045)}
+.card-body{display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding-right:24px}
+.card-title{font-family:var(--display);font-weight:400;font-size:clamp(26px,2.6vw,32px);line-height:1.1;transition:color .3s}
+.card:hover .card-title{color:var(--accent)}
+.card-desc{color:var(--muted);max-width:42ch}
+.card-cta{margin-top:8px}
+
+/* =========================================================
+   CONTACT + FOOTER
+   ========================================================= */
+.contact{padding-top:144px}
+.contact-note{margin-top:12px;color:var(--muted)}
+.contact-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px}
+.copy{display:flex;align-items:center;gap:14px;padding:12px 16px 12px 12px;border-radius:22px;font-size:clamp(16px,2vw,20px);font-weight:500;max-width:100%}
+.copy:hover{transform:translateY(-3px);background:rgba(255,255,255,.09)}
+.copy:active{transform:scale(.98)}
+.copy-ico{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:rgba(var(--accent-rgb),.14);color:var(--accent);flex:none;transition:transform .45s var(--spring)}
+.copy:hover .copy-ico{transform:rotate(-8deg) scale(1.06)}
+.copy-val{overflow-wrap:anywhere}
+.copy-hint{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--faint);margin-left:6px;transition:color .25s}
+.copy-hint .ico{width:14px;height:14px}
+.copy:hover .copy-hint{color:var(--text)}
+.copy.copied .copy-hint{color:var(--accent)}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-top:96px;padding-bottom:40px;color:var(--faint);font-size:14px}
+
+/* =========================================================
+   PROJECT PAGE
+   ========================================================= */
+.proj-head{padding-top:140px}
+.proj-title{margin-top:40px;font-family:var(--display);font-weight:400;font-size:clamp(50px,7.5vw,104px);line-height:.95;outline:none}
+.proj-sub{margin-top:20px;max-width:44ch;font-size:clamp(18px,2vw,23px);line-height:1.4;color:var(--muted)}
+.meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:48px;padding-top:24px;border-top:1px solid var(--line)}
+.meta dt{font-size:14px;color:var(--faint);margin-bottom:6px}
+.meta dd{font-size:16px;line-height:1.45}
+.cover{margin-top:48px}
+
+.sec{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:26px;padding-top:120px}
+.sec > .sec-title{grid-column:1 / 5;grid-row:1;font-family:var(--display);font-weight:400;font-size:clamp(28px,3vw,38px);line-height:1.1;padding-right:24px}
+.sec > .t{grid-column:5 / 13}
+.sec > .f{grid-column:1 / 13;margin:18px 0}
+.sub{font-family:var(--display);font-weight:400;font-size:22px;line-height:1.25;margin-top:18px}
+.sec > .sub:first-of-type{margin-top:0}
+
+.bul{display:grid;gap:14px;max-width:62ch}
+.bul li{position:relative;padding-left:28px;color:var(--body-text);transition:color .25s}
+.bul li::before{content:"";position:absolute;left:3px;top:.8em;width:10px;height:2px;border-radius:2px;background:var(--accent);transition:width .35s var(--spring)}
+.bul li:hover{color:var(--text)}
+.bul li:hover::before{width:16px}
+
+.callout{padding:22px 24px;border-radius:18px;max-width:62ch}
+.callout:hover{transform:translateY(-2px)}
+.callout .lbl{font-size:14px;font-weight:500;color:var(--accent);margin-bottom:6px}
+.callout p{color:var(--body-text)}
+
+.finding-head{display:flex;flex-direction:column;gap:12px;margin-top:30px}
+.finding-head .sub{margin-top:0}
+
+.fig{margin:0}
+.frame{display:block;width:100%;border-radius:18px;overflow:hidden;background:#121317;border:1px solid var(--line);cursor:zoom-in;transition:border-color .3s, transform .6s var(--ease)}
+.frame img{width:100%;height:auto;transition:transform 1s var(--ease)}
+.frame:hover{border-color:rgba(255,255,255,.26)}
+.frame:hover img{transform:scale(1.02)}
+.fig figcaption{margin-top:12px;font-size:14px;line-height:1.5;color:var(--faint);max-width:70ch}
+.fig figcaption strong{display:block;font-weight:500;font-size:16px;color:var(--text);margin-bottom:2px}
+.ph{aspect-ratio:16/9;border-radius:18px;border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--faint);font-size:14px}
+.ph .ico{width:28px;height:28px}
+.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.gallery .ph{aspect-ratio:4/3}
+
+.steps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.step{display:flex;flex-direction:column;justify-content:space-between;gap:24px;min-height:140px;padding:18px;border-radius:18px;font-size:15px;line-height:1.4;color:var(--body-text)}
+.step:hover{transform:translateY(-4px);color:var(--text)}
+.step .n{font-family:var(--display);font-size:30px;line-height:1;color:var(--faint);transition:color .3s}
+.step:hover .n{color:var(--accent)}
+
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.tile{padding:22px;border-radius:18px}
+.tile:hover{transform:translateY(-4px)}
+.tile h3{font-family:var(--display);font-weight:400;font-size:20px;line-height:1.2;margin-bottom:8px;transition:color .3s}
+.tile:hover h3{color:var(--accent)}
+.tile p{font-size:15px;line-height:1.5;color:var(--muted)}
+
+.persona{display:grid;grid-template-columns:auto 1fr;gap:18px;padding:24px;border-radius:22px;max-width:62ch}
+.persona:hover{transform:translateY(-3px)}
+.avatar{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:rgba(var(--accent-rgb),.15);color:var(--accent);font-family:var(--display);font-size:20px}
+.persona h3{font-family:var(--display);font-weight:400;font-size:22px;line-height:1.2}
+.persona p{margin-top:6px;color:var(--body-text);font-size:16px}
+.persona .chips{margin-top:14px}
+
+.next-wrap{padding-top:140px}
+.next{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:32px;align-items:center;padding:14px 14px 14px 40px;border-radius:28px}
+.next:hover{transform:translateY(-4px);background:rgba(255,255,255,.075)}
+.next-kicker{font-size:14px;color:var(--faint)}
+.next-title{font-family:var(--display);font-weight:400;font-size:clamp(34px,4vw,52px);line-height:1.02;margin-top:8px;transition:color .3s}
+.next:hover .next-title{color:var(--accent)}
+.next-text p{margin-top:12px;color:var(--muted);max-width:40ch}
+.next-text .btn{margin-top:28px}
+.next-media{border-radius:18px;overflow:hidden;aspect-ratio:16/10;background:#15161A}
+.next-media img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.next:hover .next-media img{transform:scale(1.045)}
+.back-all{display:flex;justify-content:center;margin-top:24px}
+
+/* =========================================================
+   ABOUT + RESUME
+   ========================================================= */
+.about-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:56px;align-items:start;margin-top:56px}
+.about-grid .frame{aspect-ratio:3/4}
+.about-grid .frame img{height:100%;object-fit:cover}
+.about-text p{color:var(--body-text);max-width:60ch}
+.about-text p + p{margin-top:22px}
+.about-text .lead{font-size:clamp(19px,1.8vw,22px);line-height:1.5;color:var(--text)}
+.about-text .btn-row{margin-top:40px}
+.about-photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:24px}
+.about-photos .frame{aspect-ratio:4/3}
+.about-photos .frame img{height:100%;object-fit:cover}
+
+.resume-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px}
+.resume-frame{margin-top:40px;border-radius:22px;overflow:hidden;height:min(1100px,calc(100vh - 120px));min-height:520px}
+.resume-frame object,.resume-frame iframe{width:100%;height:100%;border:0;display:block;background:#fff}
+.resume-empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:32px;color:var(--muted)}
+
+/* =========================================================
+   TOAST, CURSOR LABEL, LIGHTBOX
+   ========================================================= */
+.toast{position:fixed;left:50%;bottom:28px;z-index:60;display:flex;align-items:center;gap:10px;padding:12px 18px 12px 14px;border-radius:24px;font-size:15px;font-weight:500;
+  background:rgba(22,23,26,.6);opacity:0;transform:translate(-50%,24px) scale(.96);pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0) scale(1)}
+.toast .ico{color:var(--accent)}
+
+.cchip{position:fixed;left:0;top:0;z-index:90;pointer-events:none}
+.cchip-in{display:block;padding:9px 16px;border-radius:20px;font-size:13px;font-weight:500;white-space:nowrap;
+  background:rgba(20,21,24,.5);border:1px solid rgba(255,255,255,.2);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  transform:translate(14px,14px) scale(.4);opacity:0;transition:opacity .2s, transform .4s var(--spring)}
+.cchip.on .cchip-in{opacity:1;transform:translate(14px,14px) scale(1)}
+
+.lb{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:5vh 4vw;background:rgba(5,6,8,.74);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);opacity:0;pointer-events:none;transition:opacity .3s}
+.lb.open{opacity:1;pointer-events:auto}
+.lb img{max-width:100%;max-height:88vh;border-radius:14px;transform:scale(.95);transition:transform .5s var(--spring);cursor:zoom-out}
+.lb.open img{transform:none}
+.lb-close{position:absolute;top:20px;right:20px;width:48px;height:48px;border-radius:24px;display:grid;place-items:center}
+.lb-close:hover{transform:rotate(90deg)}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width:980px){
+  .steps{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:900px){
+  .card{grid-template-columns:1fr;gap:20px}
+  .card-body{padding:0 10px 12px}
+  .sec{padding-top:88px}
+  .sec > *{grid-column:1 / -1 !important}
+  .sec > .sec-title{grid-row:auto}
+  .meta{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .gallery{grid-template-columns:1fr}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .next{grid-template-columns:1fr;padding:14px}
+  .next-text{padding:12px 12px 4px;order:2}
+  .about-grid{grid-template-columns:1fr;gap:36px}
+  .about-grid .frame{max-width:460px}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .nav{top:12px;height:56px;padding:0 6px}
+  .nav-link{padding:0 13px;font-size:14px}
+  .tiles{grid-template-columns:1fr}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .about-photos{grid-template-columns:1fr}
+  .copy-hint span{display:none}
+  .foot{flex-direction:column-reverse;align-items:flex-start}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
+  .name .ch{transform:none !important}
+  .scroll-cue{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav glass" aria-label="Main">
+  <a class="nav-logo" href="#/" aria-label="Home">RW</a>
+  <div class="nav-links">
+    <span class="nav-ind" aria-hidden="true"></span>
+    <a class="nav-link" href="#/about" data-nav="about">About</a>
+    <a class="nav-link" href="#/resume" data-nav="resume">Resume</a>
+    <a class="nav-link" href="#/work" data-nav="work">Work</a>
+  </div>
+  <span class="nav-progress" aria-hidden="true"></span>
+</nav>
+
+<main id="app"></main>
+
+<div class="toast glass" role="status" aria-live="polite"></div>
+<div class="cchip" aria-hidden="true"><span class="cchip-in"></span></div>
+<div class="lb" role="dialog" aria-modal="true" aria-label="Image preview">
+  <button class="lb-close glass" aria-label="Close image"></button>
+  <img alt="">
+</div>
+
+<script>
+/* =========================================================
+   EDIT YOUR CONTENT HERE
+   Everything on the site comes from these objects.
+   To add an image to an empty slot, paste its URL into src: "".
+   ========================================================= */
+const CONTACT = {
+  phone: "973-803-6004",
+  email: "rhyswilliams0202@gmail.com"
+};
+
+const RESUME_URL = "resume.pdf"; // put resume.pdf in the same folder as this file
+
+const IMG = "https://framerusercontent.com/images/";
+
+const ABOUT = {
+  paragraphs: [
+    "I am a Creative Technology and Design graduate from CU Boulder’s College of Engineering, a multidisciplinary program that combines programming, creative problem-solving, and human-centered design. I have also earned a minor in Data Science and a User Experience certificate, allowing me to create intuitive interfaces backed by data-driven insights.",
+    "I am a passionate musician who plays guitar, bass, and piano, and performed in a college band. I also create original music with Logic Pro. Outside of music, I enjoy skiing, hiking, and spending time in nature. When I'm indoors, you'll usually find me immersed in the world of entertainment and media. I'm excited by the opportunity to contribute to an industry that has inspired and influenced me throughout my life."
+  ],
+  portrait: IMG + "ru203At6ewJU4yygmnEyh0JmSQ.jpeg?scale-down-to=1600",
+  photos: [
+    IMG + "xcDT7xwAkRwmR4F71ReknJWGhLM.jpeg?scale-down-to=2048",
+    IMG + "NoUMVw4agrIIsrtKIhrTMbGdZR0.jpg?scale-down-to=2048"
+  ]
+};
+
+const B = {
+  bullets: (...items) => ({ type: "bullets", items }),
+  sub: text => ({ type: "sub", text }),
+  callout: (label, text) => ({ type: "callout", label, text }),
+  chips: (...items) => ({ type: "chips", items }),
+  image: (src, caption) => ({ type: "image", src, caption }),
+  gallery: items => ({ type: "gallery", items }),
+  steps: (...items) => ({ type: "steps", items }),
+  tiles: items => ({ type: "tiles", items }),
+  persona: p => ({ type: "persona", ...p }),
+  finding: f => ({ type: "finding", ...f })
+};
+
+const PROJECTS = [
+  {
+    id: "nudge",
+    title: "Nudge",
+    card: "A digital keychain and docking station focusing on daily task management while encouraging intentional time usage.",
+    tags: ["Capstone", "Hardware + UI", "Team of 4"],
+    subtitle: "A retro-style keychain and docking station built to help you start tasks and stay grounded.",
+    cover: IMG + "kaFW2mczKlk4uU44MVM2RJY90qs.png",
+    meta: [["Role", "UX, UI, prototyping, branding"], ["Tools", "Figma, SquareLine Studio, Illustrator"], ["Team", "Four-person product team"], ["Focus", "Task initiation and grounded routines"]],
+    sections: [
+      { title: "The problem", blocks: [
+        B.bullets(
+          "A lot of us grab our phones for things that have nothing to do with the phone: reminders, timers, a quick note.",
+          "We wanted a physical alternative. Something you set once and carry with you, with no app to open.",
+          "We designed it with ADHD and other forms of neurodivergence in mind, where even a short task list can be hard to start.",
+          "It started as a smartwatch that also tracked health vitals. After feedback from outside experts, we cut it down to just task structure and focus."
+        )
+      ]},
+      { title: "The journey", blocks: [
+        B.sub("Figma, testing, and the first signals"),
+        B.bullets(
+          "Designed the first screens in Figma. Swapped an old vertical menu for a horizontal nav bar and added a daily intention field to the home screen.",
+          "Ran 3 usability tests with people I know who have ADHD or another form of neurodivergence.",
+          "Walked each person through the home screen, task list, Pomodoro timer, and breathing exercise one at a time.",
+          "Everyone picked up the navigation within a minute or two.",
+          "The big takeaway: people wanted more control over the look. Lighter colors, different fonts, a way to make it feel like theirs. That shaped almost everything after."
+        ),
+        B.image("", "Early prototype screens and the first usability testing loop."),
+        B.sub("Moving from mockup to hardware"),
+        B.bullets(
+          "Rebuilt the interface in SquareLine Studio, which is what actually runs on the ESP32-S3 inside the keychain.",
+          "SquareLine works nothing like Figma. A lot of this phase was just getting files to open without crashing.",
+          "One bug kept coming back: fonts that were never switched on in the board's config file. It was a one-line fix once I found it.",
+          "Next I built the docking station screens: the start-up prompt, daily intention picker, and task list.",
+          "Worked side by side in SquareLine with our frontend teammate, using shared naming conventions so we wouldn't overwrite each other."
+        ),
+        B.callout("Moment", "Getting one test screen to light up on the real hardware, after an email, a SquareLine edit, and a full export and upload, was a really satisfying moment."),
+        B.image("", "A test screen lighting up on the physical device after export and upload."),
+        B.sub("Testing on the real device"),
+        B.bullets(
+          "Once the physical buttons worked, I ran a second round of testing on the actual device instead of a Figma click-through.",
+          "Wrote a full script and question set so answers could be compared across interviews.",
+          "Interviewed 4 more people on the working hardware.",
+          "The navigation held up. The visuals didn't. People said it looked like a generic modern gadget: colors that didn't feel intentional, text that was hard to read at a glance, too close to a phone app."
+        ),
+        B.image("", "Interface references before the second structured hardware test."),
+        B.sub("A full retro pivot"),
+        B.bullets(
+          "Instead of tweaking the old look, we rebranded: a pixelated retro typeface, a new color palette, and every screen redesigned on both the keychain and the dock.",
+          "Around the same time, the enclosure got too big to wear on a wrist, so we moved from a watch to something that clips onto a keychain or backpack.",
+          "Closer to a Tamagotchi than a smartwatch."
+        ),
+        B.callout("Key decision", "The second round of testing said the interface still felt generic. We rebuilt the visual identity around a retro pixel look and changed the hardware from a watch to a keychain."),
+        B.image("", "The retro direction pulled together the hardware shift and the interface identity.")
+      ]},
+      { title: "The final product", blocks: [
+        B.bullets(
+          "Docking station: set a daily intention, plan 3 tasks, jot quick notes, and see your progress.",
+          "Keychain: check your intention, get reminders for your 3 tasks, run a Pomodoro timer, and do a guided breathing exercise.",
+          "Both share the same retro pixel look.",
+          "Both are made to be checked in a few seconds, not scrolled through."
+        ),
+        B.gallery([
+          { src: "", title: "Docking station", caption: "Planning the day before leaving the desk." },
+          { src: "", title: "Docked keychain", caption: "The two parts of the system reconnecting." },
+          { src: "", title: "Retro identity", caption: "A pixelated interface language that feels specific to Nudge." }
+        ])
+      ]},
+      { title: "Reflection", blocks: [
+        B.bullets(
+          "A lot of the design came from limits we didn't choose: a board that wouldn't compile, a case that got too bulky, feedback that pointed in different directions.",
+          "Worked across Figma, SquareLine Studio, and Illustrator while dealing with real hardware constraints.",
+          "The retro pivot is the part I'm proudest of. It came from watching people use an early version and being willing to start over on what wasn't working instead of defending it."
+        )
+      ]}
+    ]
+  },
+  {
+    id: "phonejail",
+    title: "Phone Jail",
+    card: "Laser-cut lockbox that lets users lock away a phone or device for a set duration.",
+    tags: ["Arduino", "Fabrication", "Solo build"],
+    subtitle: "A physical lockbox that locks your phone away for a set amount of time.",
+    cover: IMG + "iXFmVlq5HVtAXlE4weNfloqzVic.jpeg?scale-down-to=2048",
+    meta: [["Role", "UX, product design, 3D modeling"], ["Tools", "Arduino, laser cutting, Onshape"], ["Focus", "Avoiding distractions"]],
+    sections: [
+      { title: "Summary", blocks: [
+        B.bullets(
+          "A box that locks your phone away for however long you set.",
+          "Put the phone in, type a time on the keypad, and it stays locked until the countdown ends.",
+          "Runs on an Arduino with a keypad, an LCD screen, and a servo that works the lock."
+        )
+      ]},
+      { title: "Problem", blocks: [
+        B.bullets(
+          "Phones are built to keep you checking them: notifications, feeds, algorithms.",
+          "Screen time apps try to help, but they're easy to get around.",
+          "I wanted something physical that takes the temptation away completely, while still letting you use your phone on purpose when you need it."
+        )
+      ]},
+      { title: "The journey", blocks: [
+        B.sub("Concept"),
+        B.bullets("The whole idea is that the box enforces focus by physically locking the phone inside. Here's how a session works:"),
+        B.steps(
+          "Put your phone in the box",
+          "Set a timer on the keypad",
+          "The servo locks the door",
+          "The LCD counts down the time left",
+          "LEDs show it's locked",
+          "Timer ends, the lock releases"
+        ),
+        B.sub("Design and planning"),
+        B.bullets(
+          "Measured every part before designing the box: Arduino, LCD, 4×4 keypad, servo lock, LEDs, and buzzer.",
+          "The measurements had to be exact or the keypad and screen wouldn't fit."
+        ),
+        B.image("", "Enclosure planning and measurements."),
+        B.sub("Prototyping"),
+        B.bullets(
+          "Built the whole circuit on a breadboard before putting anything in the box.",
+          "Wired the keypad and LCD to the Arduino.",
+          "Wrote the timer logic.",
+          "Tested the servo locking and unlocking.",
+          "Added the LEDs and buzzer."
+        ),
+        B.image("", "Breadboard prototype."),
+        B.sub("Fabrication and assembly"),
+        B.bullets(
+          "Laser-cut wood panels for the box.",
+          "3D printed a latch that connects to the servo.",
+          "Acrylic top so you can still see your phone inside.",
+          "Hinges for the door.",
+          "Soldered the electronics onto a protoboard and mounted it inside the door."
+        ),
+        B.image("", "Fabrication and assembly.")
+      ]},
+      { title: "The final product", blocks: [
+        B.bullets(
+          "Keypad to set the timer",
+          "LCD countdown",
+          "Servo-controlled lock",
+          "LEDs that show lock status",
+          "Buzzer when time's up",
+          "Emergency unlock"
+        ),
+        B.image("", "The finished Phone Jail.")
+      ]},
+      { title: "Reflection", blocks: [
+        B.bullets(
+          "Got a lot better at hardware prototyping, embedded programming, and building a physical product.",
+          "The wiring took up way more room than I planned. Next time I'd make the box smaller and design around the circuitry from the start.",
+          "I'd also add a rechargeable battery so it's actually practical day to day."
+        )
+      ]}
+    ]
+  },
+  {
+    id: "techsoup",
+    title: "TechSoup UX Audit",
+    card: "A usability and accessibility audit of TechSoup's website, discovering friction in onboarding and navigation and providing actionable recommendations.",
+    tags: ["Accessibility", "Research", "Solo"],
+    subtitle: "A usability and accessibility audit of TechSoup’s website, surfacing friction in onboarding and navigation with actionable recommendations.",
+    cover: IMG + "BFAVSWQZQtxrMtc9xDjshDmZA.png",
+    meta: [["Role", "Independent UX auditor"], ["Methods", "Heuristic, accessibility & IA evaluation"], ["Course", "UX Design 2, CU Boulder"], ["Timeline", "Spring 2026"]],
+    sections: [
+      { title: "Context", blocks: [
+        B.bullets(
+          "TechSoup gives nonprofits discounted and donated tech, but new visitors often don't know where to start.",
+          "I audited the main flow: finding a service and signing up.",
+          "Covered usability, accessibility, content, and information architecture.",
+          "Two things stood out: accessibility problems that block people completely, and friction in a new visitor's first few minutes."
+        )
+      ]},
+      { title: "Approach", blocks: [
+        B.chips("Heuristic evaluation", "WCAG accessibility audit", "Content & visual review", "Persona-driven walkthrough", "Open card sort"),
+        B.bullets(
+          "I walked through the site as TechSoup's core visitor: someone new to nonprofit work, on a tight budget, who needs the right tech fast.",
+          "That made the early journey the priority. If sign-up or the services list is confusing, people leave before they ever see what TechSoup offers."
+        )
+      ]},
+      { title: "Research", blocks: [
+        B.persona({
+          initials: "JN",
+          name: "John Nathanson",
+          text: "24-year-old librarian in Boulder. Needs affordable tech, clear guidance, and a sign-up that doesn't slow him down before he knows what TechSoup can offer.",
+          goal: "Goal: find discounts quickly",
+          pain: "Pain: no clear first step"
+        })
+      ]},
+      { title: "Where visitors actually get stuck", blocks: [
+        B.bullets("Four issues mattered most, either because they block people outright or because they hit at the very start of the flow."),
+        B.finding({
+          title: "Buttons users can’t actually read",
+          priority: "high", tag: "Accessibility",
+          bullets: [
+            "The main call to action, the button most first-time visitors need, is light orange text on white.",
+            "It fails WCAG AA's 4.5:1 contrast minimum.",
+            "For people with low vision or color blindness, the most important button on the page is the hardest one to see."
+          ],
+          fix: "Darken the orange, or switch to a color that passes 4.5:1. A small palette change that lets more people use the site.",
+          image: { src: IMG + "BJisYwva8LHFjjGxdCk8THSQjdI.png", caption: "Orange subscribe button failing contrast requirements." }
+        }),
+        B.finding({
+          title: "Locked out without a mouse",
+          priority: "high", tag: "Accessibility",
+          bullets: [
+            "Two flows don't work for keyboard-only users at all.",
+            "The Learn More links on the All Services page can't be reached with Tab.",
+            "The homepage carousel arrows only respond to a mouse.",
+            "WCAG requires every interactive element to work from a keyboard."
+          ],
+          fix: "Make both focusable and usable with Tab and Enter, and add arrow-key support to the carousel."
+        }),
+        B.finding({
+          title: "Asked to commit before seeing the value",
+          priority: "medium", tag: "Heuristic evaluation",
+          bullets: [
+            "Before a new visitor can see any services, they have to make an account, verify nonprofit status, and create a password with five requirements.",
+            "People should be able to look around before they're asked to commit."
+          ],
+          fix: "Move verification to after someone finds the service they actually want.",
+          image: { src: IMG + "XksltOC0QmP50GP3v5WrW4MF1kY.png", caption: "Join form appears before service value is clear." }
+        }),
+        B.finding({
+          title: "Too many doors, opened all at once",
+          priority: "medium", tag: "User journey",
+          bullets: [
+            "The services page shows a dense sidebar of categories plus a grid of Most Popular cards, with no filtering step in between.",
+            "If you don't already know TechSoup's categories, that's a lot to take in before finding anything useful."
+          ],
+          fix: "Add a short onboarding step, three or four questions, that narrows the options before showing everything.",
+          image: { src: IMG + "RRb1IqAogoQxetAWHXP4ukXNoE.png", caption: "Dense sidebar plus popular cards with no filtering step." }
+        })
+      ]},
+      { title: "Smaller fixes", blocks: [
+        B.tiles([
+          { title: "One site, two nav bars", text: "Service pages are light mode, everything else is dark mode. It feels like two products stitched together." },
+          { title: "Two names, one button", text: "The nav says “Join.” The homepage says “Join TechSoup.” Same action, two labels." },
+          { title: "Service summaries run long", text: "Compliance filing cards use three dense paragraphs for what two sentences could say." },
+          { title: "No green light on completed fields", text: "Forms flag empty fields in red but never confirm when a field is filled in correctly." },
+          { title: "One audience, no side doors", text: "Homepage CTAs assume every visitor is a nonprofit. Donors and volunteers don't get their own way in." },
+          { title: "No shortcuts for returning users", text: "Every visit starts from zero. No saved services or recently viewed." }
+        ])
+      ]},
+      { title: "Information Architecture", blocks: [
+        B.bullets(
+          "Ran an open card sort with two participants: TechSoup's real content, no preset categories.",
+          "Both mostly landed on the structure the live site already uses, which is a good sign.",
+          "Products and Services read as separate categories, but it wasn't clear which one owns things like software licenses.",
+          "Learning content like courses and webinars has no clear home.",
+          "AI for Nonprofits didn't fit any category either participant tried."
+        ),
+        B.image(IMG + "EoPi14H8SFabFxcfX0rQUFuIYs.webp?scale-down-to=2048", "Open card sort sitemap. Products and Services mostly held together, while learning content and AI for Nonprofits resisted easy categorization.")
+      ]},
+      { title: "Reflection", blocks: [
+        B.bullets(
+          "TechSoup already has a clear mission and clean, trustworthy design, which is why the accessibility issues should be fixed first.",
+          "The biggest friction hits early: signing up before seeing any value, then a wall of services with no clear way in.",
+          "Next I'd test these fixes with real first-time nonprofit users completing a request start to finish."
+        ),
+        B.sub("Next steps"),
+        B.bullets(
+          "Bring CTA contrast and keyboard access up to WCAG AA",
+          "Move membership validation later in the flow",
+          "Usability-test the redesigned service-selection flow"
+        )
+      ]}
+    ]
+  }
+];
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const FINE = matchMedia("(hover: hover) and (pointer: fine)").matches;
+const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+const ICONS = {
+  arrowR: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  arrowL: '<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  arrowUp: '<path d="M12 19V5M6 11l6-6 6 6"/>',
+  phone: '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  copy: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
+  download: '<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',
+  external: '<path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/>',
+  image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-8 9"/>',
+  close: '<path d="M6 6l12 12M18 6 6 18"/>'
+};
+const ic = (n, cls = "") => `<svg class="ico ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]}</svg>`;
+
+/* =========================================================
+   RENDERERS
+   ========================================================= */
+function figure(b) {
+  const cap = (b.caption || b.title)
+    ? `<figcaption>${b.title ? `<strong>${esc(b.title)}</strong>` : ""}${esc(b.caption)}</figcaption>` : "";
+  if (!b.src) {
+    return `<figure class="fig"><div class="ph glass">${ic("image")}<span>Add image here</span></div>${cap}</figure>`;
+  }
+  const alt = b.alt || b.title || b.caption || "";
+  return `<figure class="fig"><button class="frame" data-zoom="${esc(b.src)}" data-cursor="Expand" aria-label="Expand image${alt ? ": " + esc(alt) : ""}"><img src="${esc(b.src)}" alt="${esc(alt)}" loading="lazy"></button>${cap}</figure>`;
+}
+
+const bulletList = (items, cls = "t") => `<ul class="bul ${cls}">${items.map(i => `<li>${esc(i)}</li>`).join("")}</ul>`;
+
+function renderBlock(b) {
+  switch (b.type) {
+    case "bullets": return bulletList(b.items);
+    case "sub": return `<h3 class="sub t">${esc(b.text)}</h3>`;
+    case "callout": return `<div class="callout glass t"><div class="lbl">${esc(b.label)}</div><p>${esc(b.text)}</p></div>`;
+    case "chips": return `<div class="chips t">${b.items.map(i => `<span class="chip glass">${esc(i)}</span>`).join("")}</div>`;
+    case "image": return `<div class="f">${figure(b)}</div>`;
+    case "gallery": return `<div class="gallery f">${b.items.map(figure).join("")}</div>`;
+    case "steps": return `<ol class="steps f">${b.items.map((s, i) => `<li class="step glass"><span class="n">${i + 1}</span><span>${esc(s)}</span></li>`).join("")}</ol>`;
+    case "tiles": return `<div class="tiles f">${b.items.map(t => `<div class="tile glass"><h3>${esc(t.title)}</h3><p>${esc(t.text)}</p></div>`).join("")}</div>`;
+    case "persona": return `
+      <div class="persona glass t">
+        <div class="avatar" aria-hidden="true">${esc(b.initials)}</div>
+        <div>
+          <h3>${esc(b.name)}</h3>
+          <p>${esc(b.text)}</p>
+          <div class="chips"><span class="chip glass">${esc(b.goal)}</span><span class="chip glass">${esc(b.pain)}</span></div>
+        </div>
+      </div>`;
+    case "finding": return `
+      <div class="finding-head t">
+        <h3 class="sub">${esc(b.title)}</h3>
+        <div class="chips">
+          <span class="chip glass ${b.priority}"><i class="dot" aria-hidden="true"></i>${b.priority === "high" ? "High priority" : "Medium priority"}</span>
+          <span class="chip glass">${esc(b.tag)}</span>
+        </div>
+      </div>
+      ${bulletList(b.bullets)}
+      <div class="callout glass t"><div class="lbl">Recommendation</div><p>${esc(b.fix)}</p></div>
+      ${b.image ? `<div class="f">${figure(b.image)}</div>` : ""}`;
+    default: return "";
+  }
+}
+
+function copyBtn(icon, val, label) {
+  return `<button class="copy glass" data-copy="${esc(val)}" data-label="${esc(label)}" aria-label="Copy ${esc(label.toLowerCase())}: ${esc(val)}">
+    <span class="copy-ico">${ic(icon)}</span>
+    <span class="copy-val">${esc(val)}</span>
+    <span class="copy-hint">${ic("copy")}<span>Copy</span></span>
+  </button>`;
+}
+
+function contactAndFooter() {
+  return `
+  <section class="wrap contact" id="contact">
+    <h2 class="h2">Contact</h2>
+    <p class="contact-note">Click either one to copy it.</p>
+    <div class="contact-row">
+      ${copyBtn("phone", CONTACT.phone, "Phone number")}
+      ${copyBtn("mail", CONTACT.email, "Email")}
+    </div>
+  </section>
+  <footer class="wrap foot">
+    <span>© ${new Date().getFullYear()} Rhys Williams</span>
+    <button class="btn btn-sm glass magnetic" data-top>${ic("arrowUp")}Back to top</button>
+  </footer>`;
+}
+
+function splitName(name) {
+  let i = 0;
+  return name.split(" ").map(w =>
+    `<span class="w" aria-hidden="true">${[...w].map(c => `<span class="ch"><span class="ci" style="--i:${i++}">${c}</span></span>`).join("")}</span>`
+  ).join(" ");
+}
+
+function workCard(p) {
+  return `
+  <a class="card glass" href="#/work/${p.id}">
+    <div class="card-media" data-cursor="View project"><img src="${esc(p.cover)}" alt="${esc(p.title)} preview" loading="lazy"></div>
+    <div class="card-body">
+      <h3 class="card-title">${esc(p.title)}</h3>
+      <p class="card-desc">${esc(p.card)}</p>
+      <div class="chips">${p.tags.map(t => `<span class="chip glass">${esc(t)}</span>`).join("")}</div>
+      <span class="btn btn-sm glass card-cta">View project ${ic("arrowR", "ico-arrow")}</span>
+    </div>
+  </a>`;
+}
+
+const pages = {
+  home() {
+    return `
+    <section class="hero" id="top">
+      <canvas aria-hidden="true"></canvas>
+      <div class="hero-inner">
+        <h1 class="name" aria-label="Rhys Williams" tabindex="-1">${splitName("Rhys Williams")}</h1>
+        <p class="hero-sub">I design intuitive products and experiences through UX, research, and prototyping.</p>
+        <div class="hero-cta"><a class="btn btn-solid glass magnetic" href="#/work">Explore work ${ic("arrowR", "ico-arrow")}</a></div>
+      </div>
+      <div class="scroll-cue" aria-hidden="true"><span></span></div>
+    </section>
+    <section class="wrap section" id="projects">
+      <h2 class="h2">My work</h2>
+      <div class="work-list">${PROJECTS.map(workCard).join("")}</div>
+    </section>`;
+  },
+
+  about() {
+    return `
+    <section class="wrap page-top">
+      <h1 class="page-title" tabindex="-1">About</h1>
+      <div class="about-grid">
+        ${figure({ src: ABOUT.portrait, alt: "Portrait of Rhys Williams" })}
+        <div class="about-text">
+          ${ABOUT.paragraphs.map((p, i) => `<p class="${i === 0 ? "lead" : ""}">${esc(p)}</p>`).join("")}
+          <div class="btn-row">
+            <a class="btn btn-solid glass" href="#/work">See my work ${ic("arrowR", "ico-arrow")}</a>
+            <a class="btn glass" href="#/resume">View resume</a>
+          </div>
+        </div>
+      </div>
+      <div class="about-photos">${ABOUT.photos.map(src => figure({ src, alt: "Photo of Rhys" })).join("")}</div>
+    </section>`;
+  },
+
+  resume() {
+    return `
+    <section class="wrap page-top">
+      <div class="resume-head">
+        <h1 class="page-title" tabindex="-1">Resume</h1>
+        <div class="btn-row">
+          <a class="btn btn-solid glass" href="${esc(RESUME_URL)}" download>${ic("download")}Download PDF</a>
+          <a class="btn glass" href="${esc(RESUME_URL)}" target="_blank" rel="noopener">${ic("external")}Open in new tab</a>
+        </div>
+      </div>
+      <div class="resume-frame glass" id="resumeFrame">
+        <div class="resume-empty"><p>Loading resume…</p></div>
+      </div>
+    </section>`;
+  },
+
+  project(p) {
+    const i = PROJECTS.indexOf(p);
+    const next = PROJECTS[(i + 1) % PROJECTS.length];
+    return `
+    <article>
+      <header class="wrap proj-head">
+        <a class="btn btn-sm glass" href="#/work">${ic("arrowL", "ico-back")}All work</a>
+        <h1 class="proj-title" tabindex="-1">${esc(p.title)}</h1>
+        <p class="proj-sub">${esc(p.subtitle)}</p>
+        <dl class="meta">${p.meta.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
+      </header>
+      <div class="wrap cover">${figure({ src: p.cover, alt: p.title })}</div>
+      <div class="wrap">
+        ${p.sections.map(s => `<section class="sec"><h2 class="sec-title">${esc(s.title)}</h2>${s.blocks.map(renderBlock).join("")}</section>`).join("")}
+      </div>
+      <div class="wrap next-wrap">
+        <a class="next glass" href="#/work/${next.id}">
+          <div class="next-text">
+            <span class="next-kicker">Up next</span>
+            <h2 class="next-title">${esc(next.title)}</h2>
+            <p>${esc(next.card)}</p>
+            <span class="btn btn-solid glass">Next project ${ic("arrowR", "ico-arrow")}</span>
+          </div>
+          <div class="next-media" data-cursor="Next project"><img src="${esc(next.cover)}" alt="" loading="lazy"></div>
+        </a>
+        <div class="back-all"><a class="btn btn-sm glass" href="#/work">${ic("arrowL", "ico-back")}Back to all work</a></div>
+      </div>
+    </article>`;
+  }
+};
+
+/* =========================================================
+   HERO: STRINGS + NAME
+   Lines part around your name like strings, and pluck when
+   the mouse crosses them. Click the hero to strum them all.
+   ========================================================= */
+function initHero(hero) {
+  const canvas = $("canvas", hero);
+  const block = $(".hero-inner", hero);
+  const ctx = canvas.getContext("2d");
+  const chars = $$(".ch", hero);
+  const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent-rgb").split(",").map(Number);
+
+  let W = 0, H = 0, lines = [], box = { cx: 0, cy: 0, hw: 0, hh: 0 }, centers = [];
+  let raf = 0, visible = true, start = performance.now();
+  const m = { x: -1e4, y: -1e4, in: false };
+
+  function measure() {
+    const r = hero.getBoundingClientRect();
+    const b = block.getBoundingClientRect();
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = r.width; H = r.height;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    box = { cx: b.left - r.left + b.width / 2, cy: b.top - r.top + b.height / 2, hw: b.width / 2, hh: b.height / 2 };
+    const n = W < 640 ? 12 : 18;
+    const top = H * 0.08, bot = H * 0.92;
+    const prev = lines;
+    lines = [];
+    for (let i = 0; i < n; i++) {
+      const old = prev[i];
+      lines.push({
+        idx: i, y0: top + (bot - top) * (i / (n - 1)),
+        amp: 0, t: 0, px: W / 2, dir: 1,
+        ph: old ? old.ph : Math.random() * Math.PI * 2,
+        sp: old ? old.sp : 0.00035 + Math.random() * 0.00025,
+        k: old ? old.k : 0.003 + Math.random() * 0.002
+      });
+    }
+    centers = chars.map(c => {
+      const cr = c.getBoundingClientRect();
+      return { x: cr.left - r.left + cr.width / 2, y: cr.top - r.top + cr.height / 2 };
+    });
+    if (REDUCE) draw(performance.now());
+  }
+
+  // resting position of a line at x: it bows around the text block, plus a slow drift
+  function baseY(L, x, now) {
+    const gap = 26, inner = box.hh + gap, R = inner * 1.9;
+    let y = L.y0;
+    const d = y - box.cy, ad = Math.abs(d);
+    if (ad < R) {
+      const s = d === 0 ? (L.idx % 2 ? 1 : -1) : Math.sign(d);
+      const target = inner + ad * (R - inner) / R;
+      const dx = (x - box.cx) / (box.hw + 150);
+      const g = Math.exp(-(dx * dx * dx * dx));
+      y += s * (target - ad) * g;
+    }
+    if (!REDUCE) {
+      y += Math.sin(x * L.k + now * L.sp + L.ph) * 5 + Math.sin(x * L.k * 0.43 - now * L.sp * 1.3 + L.ph * 2) * 3;
+    }
+    return y;
+  }
+
+  // plucked-string vibration
+  function vib(L, x, now) {
+    if (L.amp <= 0) return 0;
+    const age = now - L.t;
+    const a = L.amp * Math.exp(-age / 750);
+    if (a < 0.05) { L.amp = 0; return 0; }
+    const env = x < L.px ? x / L.px : (W - x) / (W - L.px);
+    return L.dir * (a * env * Math.sin(age * 0.045) + a * 0.25 * Math.sin(Math.PI * 2 * x / W) * Math.sin(age * 0.09));
+  }
+
+  function heat(L, now) {
+    if (L.amp <= 0) return 0;
+    return clamp(L.amp * Math.exp(-(now - L.t) / 750) / 16, 0, 1);
+  }
+
+  function pluck(L, x, dir, amp, now) {
+    L.px = clamp(x, 30, W - 30); L.dir = dir; L.amp = amp; L.t = now;
+  }
+
+  function draw(now) {
+    ctx.clearRect(0, 0, W, H);
+    const T = REDUCE ? 99 : (now - start) / 1000;
+    const step = W < 640 ? 6 : 8;
+    const mid = (lines.length - 1) / 2;
+    for (const L of lines) {
+      const delay = Math.abs(L.idx - mid) / mid * 0.45;
+      const p = clamp((T - 0.1 - delay) / 1.1, 0, 1);
+      const li = 1 - Math.pow(1 - p, 3);
+      if (li <= 0) continue;
+      const half = li * (W / 2 + 40);
+      const x0 = Math.max(-step, box.cx - half), x1 = Math.min(W + step, box.cx + half);
+      const h = heat(L, now);
+      let near = 0;
+      if (m.in) near = clamp(1 - Math.abs(baseY(L, m.x, now) - m.y) / 70, 0, 1) * 0.12;
+      const r = Math.round(255 + (accent[0] - 255) * h);
+      const g = Math.round(255 + (accent[1] - 255) * h);
+      const bl = Math.round(255 + (accent[2] - 255) * h);
+      ctx.strokeStyle = `rgba(${r},${g},${bl},${(0.11 + near + h * 0.6).toFixed(3)})`;
+      ctx.lineWidth = 1 + h * 0.7;
+      ctx.beginPath();
+      for (let x = x0; x <= x1; x += step) {
+        const y = baseY(L, x, now) + vib(L, x, now);
+        x === x0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+  }
+
+  function loop(now) {
+    raf = requestAnimationFrame(loop);
+    if (visible && !document.hidden) draw(now);
+  }
+
+  // pointer: pluck strings you cross + magnify letters near the cursor
+  function onMove(e) {
+    const r = hero.getBoundingClientRect();
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    const now = performance.now();
+    if (m.in && !REDUCE) {
+      for (const L of lines) {
+        const ly = baseY(L, x, now);
+        if ((m.y - ly) * (y - ly) < 0) {
+          const v = clamp(Math.abs(y - m.y) / 40, 0, 1);
+          pluck(L, x, y > m.y ? 1 : -1, 7 + v * 16, now);
+        }
+      }
+    }
+    m.x = x; m.y = y; m.in = true;
+    // letters
+    chars.forEach((c, i) => {
+      const cc = centers[i]; if (!cc) return;
+      const d = Math.hypot(x - cc.x, (y - cc.y) * 1.5);
+      const f = clamp(1 - d / 170, 0, 1);
+      c.style.setProperty("--f", (f * f * (3 - 2 * f)).toFixed(3));
+    });
+  }
+  function onLeave() {
+    m.in = false; m.x = m.y = -1e4;
+    chars.forEach(c => c.style.setProperty("--f", 0));
+  }
+  function strum(x) {
+    const now = performance.now();
+    lines.forEach((L, i) => setTimeout(() => pluck(L, x, i % 2 ? 1 : -1, 12, performance.now()), i * 32));
+  }
+  function wave() {
+    chars.forEach((c, i) => setTimeout(() => pop(c.firstElementChild), i * 45));
+  }
+  function pop(ci) {
+    if (!ci.classList.contains("ready") || ci.classList.contains("pop")) return;
+    ci.classList.add("pop");
+  }
+  function onClick(e) {
+    if (e.target.closest("a,button")) return;
+    const r = hero.getBoundingClientRect();
+    strum(e.clientX - r.left);
+    if (e.target.closest(".name")) wave();
+  }
+
+  chars.forEach(c => {
+    const ci = c.firstElementChild;
+    if (REDUCE) ci.classList.add("ready");
+    ci.addEventListener("animationend", e => {
+      if (e.animationName === "rise") ci.classList.add("ready");
+      if (e.animationName === "pop") ci.classList.remove("pop");
+    });
+    c.addEventListener("pointerenter", () => pop(ci));
+  });
+
+  hero.addEventListener("pointermove", onMove);
+  hero.addEventListener("pointerleave", onLeave);
+  hero.addEventListener("click", onClick);
+
+  const ro = new ResizeObserver(measure); ro.observe(hero);
+  const io = new IntersectionObserver(([en]) => { visible = en.isIntersecting; }); io.observe(hero);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  // letters finish their entrance at ~1.1s; re-measure so letter centers are exact
+  const t = setTimeout(measure, 1300);
+
+  measure();
+  if (!REDUCE) raf = requestAnimationFrame(loop);
+
+  return () => {
+    cancelAnimationFrame(raf); clearTimeout(t); ro.disconnect(); io.disconnect();
+    hero.removeEventListener("pointermove", onMove);
+    hero.removeEventListener("pointerleave", onLeave);
+    hero.removeEventListener("click", onClick);
+  };
+}
+
+/* =========================================================
+   RESUME LOADER
+   ========================================================= */
+function initResume() {
+  const frame = $("#resumeFrame");
+  const empty = `<div class="resume-empty"><p>The resume preview can’t load here. Use the buttons above to open or download it.</p></div>`;
+  fetch(RESUME_URL, { method: "HEAD" })
+    .then(res => {
+      frame.innerHTML = res.ok
+        ? `<iframe src="${esc(RESUME_URL)}#view=FitH" title="Rhys Williams resume"></iframe>`
+        : empty;
+    })
+    .catch(() => { frame.innerHTML = empty; });
+}
+
+/* =========================================================
+   ROUTER
+   ========================================================= */
+const app = $("#app");
+const nav = $(".nav");
+let cleanup = null;
+let current = "";
+let first = true;
+
+function parse() {
+  const [a = "", b = ""] = location.hash.replace(/^#\/?/, "").split("/");
+  if (a === "about") return { page: "about" };
+  if (a === "resume") return { page: "resume" };
+  if (a === "work" && b) {
+    const p = PROJECTS.find(x => x.id === b);
+    if (p) return { page: "project:" + p.id, project: p };
+  }
+  return { page: "home", scrollTo: a === "work" ? "projects" : null };
+}
+
+function route() {
+  const r = parse();
+  if (r.page === current && r.page === "home") {
+    if (r.scrollTo) $("#" + r.scrollTo)?.scrollIntoView({ behavior: REDUCE ? "auto" : "smooth" });
+    else window.scrollTo({ top: 0, behavior: REDUCE ? "auto" : "smooth" });
+    updateNav();
+    return;
+  }
+  if (cleanup) { cleanup(); cleanup = null; }
+  current = r.page;
+
+  let html, title = "Rhys Williams";
+  if (r.page === "about") { html = pages.about(); title = "About | Rhys Williams"; }
+  else if (r.page === "resume") { html = pages.resume(); title = "Resume | Rhys Williams"; }
+  else if (r.project) { html = pages.project(r.project); title = r.project.title + " | Rhys Williams"; }
+  else html = pages.home();
+
+  app.innerHTML = html + contactAndFooter();
+  document.title = title;
+  app.classList.remove("enter"); void app.offsetWidth; app.classList.add("enter");
+
+  if (r.page === "home") cleanup = initHero($(".hero"));
+  if (r.page === "resume") initResume();
+
+  if (r.scrollTo) {
+    requestAnimationFrame(() => $("#" + r.scrollTo)?.scrollIntoView({ behavior: first || REDUCE ? "auto" : "smooth" }));
+  } else {
+    window.scrollTo({ top: 0, behavior: "instant" });
+    if (!first) $("h1", app)?.focus({ preventScroll: true });
+  }
+  first = false;
+  updateNav();
+}
+
+window.addEventListener("hashchange", route);
+
+// clicking a link to the page you're already on still does something useful
+document.addEventListener("click", e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (a && a.getAttribute("href") === (location.hash || "#/")) { e.preventDefault(); route(); }
+  const top = e.target.closest("[data-top]");
+  if (top) window.scrollTo({ top: 0, behavior: REDUCE ? "auto" : "smooth" });
+});
+
+/* =========================================================
+   NAV: sliding pill + scroll progress
+   ========================================================= */
+const ind = $(".nav-ind");
+const navLinks = $$(".nav-link");
+function activeKey() {
+  if (current === "about") return "about";
+  if (current === "resume") return "resume";
+  if (current.startsWith("project:")) return "work";
+  const pr = $("#projects");
+  if (pr && pr.getBoundingClientRect().top < innerHeight * 0.55) return "work";
+  return null;
+}
+function moveInd(el) {
+  if (!el) { ind.style.opacity = 0; return; }
+  ind.style.opacity = 1;
+  ind.style.width = el.offsetWidth + "px";
+  ind.style.transform = `translateX(${el.offsetLeft}px)`;
+}
+function updateNav() {
+  const key = activeKey();
+  navLinks.forEach(l => {
+    const on = l.dataset.nav === key;
+    l.classList.toggle("is-active", on);
+    if (on) l.setAttribute("aria-current", "page"); else l.removeAttribute("aria-current");
+  });
+  if (!$(".nav-links").matches(":hover")) moveInd(navLinks.find(l => l.dataset.nav === key));
+  const max = document.documentElement.scrollHeight - innerHeight;
+  const p = max > 0 ? clamp(scrollY / max, 0, 1) : 0;
+  nav.style.setProperty("--p", p.toFixed(4));
+  nav.style.setProperty("--po", current !== "home" || p > 0.02 ? 1 : 0);
+}
+navLinks.forEach(l => l.addEventListener("pointerenter", () => moveInd(l)));
+$(".nav-links").addEventListener("pointerleave", () => moveInd(navLinks.find(l => l.dataset.nav === activeKey())));
+let ticking = false;
+window.addEventListener("scroll", () => {
+  if (ticking) return; ticking = true;
+  requestAnimationFrame(() => { updateNav(); ticking = false; });
+}, { passive: true });
+window.addEventListener("resize", updateNav);
+
+/* =========================================================
+   GLASS LIGHT + MAGNETIC BUTTONS
+   ========================================================= */
+if (FINE) {
+  let magEl = null;
+  document.addEventListener("pointermove", e => {
+    for (let el = e.target; el && el !== document.body; el = el.parentElement) {
+      if (el.classList && el.classList.contains("glass")) {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        el.style.setProperty("--my", (e.clientY - r.top) + "px");
+      }
+    }
+    if (REDUCE) return;
+    const mg = e.target.closest(".magnetic");
+    if (magEl && magEl !== mg) { magEl.style.transform = ""; magEl = null; }
+    if (mg) {
+      const r = mg.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+      mg.style.transform = `translate(${dx * 0.18}px, ${dy * 0.3}px)`;
+      magEl = mg;
+    }
+  }, { passive: true });
+}
+
+/* =========================================================
+   CURSOR LABEL ("View project", "Expand", "Next project")
+   ========================================================= */
+if (FINE) {
+  const chip = $(".cchip"), inner = $(".cchip-in");
+  let tx = -100, ty = -100, x = -100, y = -100, on = false;
+  document.addEventListener("pointermove", e => {
+    tx = e.clientX; ty = e.clientY;
+    const t = e.target.closest("[data-cursor]");
+    if (t) {
+      if (inner.textContent !== t.dataset.cursor) inner.textContent = t.dataset.cursor;
+      if (!on) { on = true; x = tx; y = ty; chip.classList.add("on"); }
+    } else if (on) { on = false; chip.classList.remove("on"); }
+  }, { passive: true });
+  window.addEventListener("scroll", () => { if (on) { on = false; chip.classList.remove("on"); } }, { passive: true });
+  (function follow() {
+    x += (tx - x) * 0.22; y += (ty - y) * 0.22;
+    chip.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    requestAnimationFrame(follow);
+  })();
+}
+
+/* =========================================================
+   COPY PHONE / EMAIL
+   ========================================================= */
+const toast = $(".toast");
+let toastTimer = 0;
+function showToast(msg) {
+  toast.innerHTML = ic("check") + `<span>${esc(msg)}</span>`;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+}
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch (_) {
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.setAttribute("readonly", "");
+    ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+    document.body.appendChild(ta); ta.select();
+    let ok = false; try { ok = document.execCommand("copy"); } catch (_) {}
+    ta.remove(); return ok;
+  }
+}
+document.addEventListener("click", async e => {
+  const btn = e.target.closest("[data-copy]");
+  if (!btn) return;
+  const ok = await copyText(btn.dataset.copy);
+  const hint = $(".copy-hint", btn);
+  if (ok) {
+    btn.classList.add("copied");
+    hint.innerHTML = ic("check") + "<span>Copied</span>";
+    showToast(btn.dataset.label + " copied");
+    setTimeout(() => { btn.classList.remove("copied"); hint.innerHTML = ic("copy") + "<span>Copy</span>"; }, 1800);
+  } else {
+    showToast("Copy didn't work here. Select the text instead.");
+  }
+});
+
+/* =========================================================
+   LIGHTBOX
+   ========================================================= */
+const lb = $(".lb"), lbImg = $(".lb img"), lbClose = $(".lb-close");
+lbClose.innerHTML = ic("close");
+let lastFocus = null;
+function openLb(src, alt) {
+  lastFocus = document.activeElement;
+  lbImg.src = src; lbImg.alt = alt || "";
+  lb.classList.add("open");
+  lbClose.focus({ preventScroll: true });
+}
+function closeLb() {
+  lb.classList.remove("open");
+  lastFocus && lastFocus.focus({ preventScroll: true });
+}
+document.addEventListener("click", e => {
+  const z = e.target.closest("[data-zoom]");
+  if (z) { openLb(z.dataset.zoom, $("img", z)?.alt); return; }
+  if (lb.classList.contains("open") && (e.target === lb || e.target === lbImg || e.target.closest(".lb-close"))) closeLb();
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && lb.classList.contains("open")) closeLb(); });
+
+/* go */
+route();
+</script>
+</body>
+</html>
