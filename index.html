@@ -1114,7 +1114,8 @@ function route() {
   document.title = title;
   app.classList.remove("enter"); void app.offsetWidth; app.classList.add("enter");
 
-  if (r.page === "home") cleanup = initHero($(".hero"));
+  // Guitar strings hero animation — temporarily disabled, revisit later.
+  // if (r.page === "home") cleanup = initHero($(".hero"));
   if (r.page === "resume") initResume();
 
   if (r.scrollTo) {
