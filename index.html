@@ -123,9 +123,9 @@ ul,ol{list-style:none}
 /* =========================================================
    HERO
    ========================================================= */
-.hero{position:relative;min-height:100vh;min-height:100svh;display:grid;place-items:center;text-align:center;padding:120px var(--pad) 110px;overflow:hidden}
+.hero{position:relative;min-height:100vh;min-height:100svh;display:grid;place-items:center start;text-align:left;padding:120px var(--pad) 110px;overflow:hidden}
 .hero canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.hero-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
+.hero-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start}
 .name{font-family:var(--display);font-weight:400;font-size:clamp(46px,11vw,140px);line-height:1;letter-spacing:-.005em;outline:none;cursor:default;user-select:none;-webkit-user-select:none}
 .name .w{display:inline-block;white-space:nowrap}
 .name .ch{
@@ -376,10 +376,10 @@ const ABOUT = {
     "I am a Creative Technology and Design graduate from CU Boulder’s College of Engineering, a multidisciplinary program that combines programming, creative problem-solving, and human-centered design. I have also earned a minor in Data Science and a User Experience certificate, allowing me to create intuitive interfaces backed by data-driven insights.",
     "I am a passionate musician who plays guitar, bass, and piano, and performed in a college band. I also create original music with Logic Pro. Outside of music, I enjoy skiing, hiking, and spending time in nature. When I'm indoors, you'll usually find me immersed in the world of entertainment and media. I'm excited by the opportunity to contribute to an industry that has inspired and influenced me throughout my life."
   ],
-  portrait: IMG + "ru203At6ewJU4yygmnEyh0JmSQ.jpeg?scale-down-to=1600",
+  portrait: "images/portrait.jpg",
   photos: [
-    IMG + "xcDT7xwAkRwmR4F71ReknJWGhLM.jpeg?scale-down-to=2048",
-    IMG + "NoUMVw4agrIIsrtKIhrTMbGdZR0.jpg?scale-down-to=2048"
+    "images/about-1.jpeg",
+    "images/about-2.jpeg"
   ]
 };
 
@@ -403,7 +403,7 @@ const PROJECTS = [
     card: "A digital keychain and docking station focusing on daily task management while encouraging intentional time usage.",
     tags: ["Capstone", "Hardware + UI", "Team of 4"],
     subtitle: "A retro-style keychain and docking station built to help you start tasks and stay grounded.",
-    cover: IMG + "kaFW2mczKlk4uU44MVM2RJY90qs.png",
+    cover: "images/nudge-docked-keychain.png",
     meta: [["Role", "UX, UI, prototyping, branding"], ["Tools", "Figma, SquareLine Studio, Illustrator"], ["Team", "Four-person product team"], ["Focus", "Task initiation and grounded routines"]],
     sections: [
       { title: "The problem", blocks: [
@@ -423,7 +423,7 @@ const PROJECTS = [
           "Everyone picked up the navigation within a minute or two.",
           "The big takeaway: people wanted more control over the look. Lighter colors, different fonts, a way to make it feel like theirs. That shaped almost everything after."
         ),
-        B.image("", "Early prototype screens and the first usability testing loop."),
+        B.image("images/nudge-early-prototype.png", "Early prototype screens and the first usability testing loop."),
         B.sub("Moving from mockup to hardware"),
         B.bullets(
           "Rebuilt the interface in SquareLine Studio, which is what actually runs on the ESP32-S3 inside the keychain.",
@@ -433,7 +433,7 @@ const PROJECTS = [
           "Worked side by side in SquareLine with our frontend teammate, using shared naming conventions so we wouldn't overwrite each other."
         ),
         B.callout("Moment", "Getting one test screen to light up on the real hardware, after an email, a SquareLine edit, and a full export and upload, was a really satisfying moment."),
-        B.image("", "A test screen lighting up on the physical device after export and upload."),
+        B.image("images/nudge-test-screen.png", "A test screen lighting up on the physical device after export and upload."),
         B.sub("Testing on the real device"),
         B.bullets(
           "Once the physical buttons worked, I ran a second round of testing on the actual device instead of a Figma click-through.",
@@ -441,7 +441,7 @@ const PROJECTS = [
           "Interviewed 4 more people on the working hardware.",
           "The navigation held up. The visuals didn't. People said it looked like a generic modern gadget: colors that didn't feel intentional, text that was hard to read at a glance, too close to a phone app."
         ),
-        B.image("", "Interface references before the second structured hardware test."),
+        B.image("images/nudge-interface-references.png", "Interface references before the second structured hardware test."),
         B.sub("A full retro pivot"),
         B.bullets(
           "Instead of tweaking the old look, we rebranded: a pixelated retro typeface, a new color palette, and every screen redesigned on both the keychain and the dock.",
@@ -449,7 +449,7 @@ const PROJECTS = [
           "Closer to a Tamagotchi than a smartwatch."
         ),
         B.callout("Key decision", "The second round of testing said the interface still felt generic. We rebuilt the visual identity around a retro pixel look and changed the hardware from a watch to a keychain."),
-        B.image("", "The retro direction pulled together the hardware shift and the interface identity.")
+        B.image("images/nudge-retro-direction.png", "The retro direction pulled together the hardware shift and the interface identity.")
       ]},
       { title: "The final product", blocks: [
         B.bullets(
@@ -459,9 +459,8 @@ const PROJECTS = [
           "Both are made to be checked in a few seconds, not scrolled through."
         ),
         B.gallery([
-          { src: "", title: "Docking station", caption: "Planning the day before leaving the desk." },
-          { src: "", title: "Docked keychain", caption: "The two parts of the system reconnecting." },
-          { src: "", title: "Retro identity", caption: "A pixelated interface language that feels specific to Nudge." }
+          { src: "images/nudge-docking-station.png", title: "Docking station", caption: "Planning the day before leaving the desk." },
+          { src: "images/nudge-docked-keychain.png", title: "Docked keychain", caption: "The two parts of the system reconnecting." }
         ])
       ]},
       { title: "Reflection", blocks: [
@@ -479,7 +478,7 @@ const PROJECTS = [
     card: "Laser-cut lockbox that lets users lock away a phone or device for a set duration.",
     tags: ["Arduino", "Fabrication", "Solo build"],
     subtitle: "A physical lockbox that locks your phone away for a set amount of time.",
-    cover: IMG + "iXFmVlq5HVtAXlE4weNfloqzVic.jpeg?scale-down-to=2048",
+    cover: "images/phonejail-cover.jpeg",
     meta: [["Role", "UX, product design, 3D modeling"], ["Tools", "Arduino, laser cutting, Onshape"], ["Focus", "Avoiding distractions"]],
     sections: [
       { title: "Summary", blocks: [
@@ -512,7 +511,7 @@ const PROJECTS = [
           "Measured every part before designing the box: Arduino, LCD, 4×4 keypad, servo lock, LEDs, and buzzer.",
           "The measurements had to be exact or the keypad and screen wouldn't fit."
         ),
-        B.image("", "Enclosure planning and measurements."),
+        B.image("images/phonejail-planning.png", "Enclosure planning and measurements."),
         B.sub("Prototyping"),
         B.bullets(
           "Built the whole circuit on a breadboard before putting anything in the box.",
@@ -521,7 +520,7 @@ const PROJECTS = [
           "Tested the servo locking and unlocking.",
           "Added the LEDs and buzzer."
         ),
-        B.image("", "Breadboard prototype."),
+        B.image("images/phonejail-breadboard.png", "Breadboard prototype."),
         B.sub("Fabrication and assembly"),
         B.bullets(
           "Laser-cut wood panels for the box.",
@@ -530,7 +529,7 @@ const PROJECTS = [
           "Hinges for the door.",
           "Soldered the electronics onto a protoboard and mounted it inside the door."
         ),
-        B.image("", "Fabrication and assembly.")
+        B.image("images/phonejail-fabrication.png", "Fabrication and assembly.")
       ]},
       { title: "The final product", blocks: [
         B.bullets(
@@ -541,7 +540,7 @@ const PROJECTS = [
           "Buzzer when time's up",
           "Emergency unlock"
         ),
-        B.image("", "The finished Phone Jail.")
+        B.image("images/phonejail-cover.jpeg", "The finished Phone Jail.")
       ]},
       { title: "Reflection", blocks: [
         B.bullets(
@@ -558,7 +557,7 @@ const PROJECTS = [
     card: "A usability and accessibility audit of TechSoup's website, discovering friction in onboarding and navigation and providing actionable recommendations.",
     tags: ["Accessibility", "Research", "Solo"],
     subtitle: "A usability and accessibility audit of TechSoup’s website, surfacing friction in onboarding and navigation with actionable recommendations.",
-    cover: IMG + "BFAVSWQZQtxrMtc9xDjshDmZA.png",
+    cover: "images/techsoup-cover.png",
     meta: [["Role", "Independent UX auditor"], ["Methods", "Heuristic, accessibility & IA evaluation"], ["Course", "UX Design 2, CU Boulder"], ["Timeline", "Spring 2026"]],
     sections: [
       { title: "Context", blocks: [
@@ -595,8 +594,7 @@ const PROJECTS = [
             "It fails WCAG AA's 4.5:1 contrast minimum.",
             "For people with low vision or color blindness, the most important button on the page is the hardest one to see."
           ],
-          fix: "Darken the orange, or switch to a color that passes 4.5:1. A small palette change that lets more people use the site.",
-          image: { src: IMG + "BJisYwva8LHFjjGxdCk8THSQjdI.png", caption: "Orange subscribe button failing contrast requirements." }
+          fix: "Darken the orange, or switch to a color that passes 4.5:1. A small palette change that lets more people use the site."
         }),
         B.finding({
           title: "Locked out without a mouse",
@@ -617,7 +615,7 @@ const PROJECTS = [
             "People should be able to look around before they're asked to commit."
           ],
           fix: "Move verification to after someone finds the service they actually want.",
-          image: { src: IMG + "XksltOC0QmP50GP3v5WrW4MF1kY.png", caption: "Join form appears before service value is clear." }
+          image: { src: "images/techsoup-commit.png", caption: "Join form appears before service value is clear." }
         }),
         B.finding({
           title: "Too many doors, opened all at once",
@@ -627,7 +625,7 @@ const PROJECTS = [
             "If you don't already know TechSoup's categories, that's a lot to take in before finding anything useful."
           ],
           fix: "Add a short onboarding step, three or four questions, that narrows the options before showing everything.",
-          image: { src: IMG + "RRb1IqAogoQxetAWHXP4ukXNoE.png", caption: "Dense sidebar plus popular cards with no filtering step." }
+          image: { src: "images/techsoup-doors.png", caption: "Dense sidebar plus popular cards with no filtering step." }
         })
       ]},
       { title: "Smaller fixes", blocks: [
@@ -648,7 +646,7 @@ const PROJECTS = [
           "Learning content like courses and webinars has no clear home.",
           "AI for Nonprofits didn't fit any category either participant tried."
         ),
-        B.image(IMG + "EoPi14H8SFabFxcfX0rQUFuIYs.webp?scale-down-to=2048", "Open card sort sitemap. Products and Services mostly held together, while learning content and AI for Nonprofits resisted easy categorization.")
+        B.image("images/techsoup-sitemap.png", "Open card sort sitemap. Products and Services mostly held together, while learning content and AI for Nonprofits resisted easy categorization.")
       ]},
       { title: "Reflection", blocks: [
         B.bullets(
@@ -892,7 +890,7 @@ function initHero(hero) {
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     box = { cx: b.left - r.left + b.width / 2, cy: b.top - r.top + b.height / 2, hw: b.width / 2, hh: b.height / 2 };
-    const n = W < 640 ? 12 : 18;
+    const n = 6;
     const top = H * 0.08, bot = H * 0.92;
     const prev = lines;
     lines = [];
@@ -935,10 +933,10 @@ function initHero(hero) {
   function vib(L, x, now) {
     if (L.amp <= 0) return 0;
     const age = now - L.t;
-    const a = L.amp * Math.exp(-age / 750);
+    const a = L.amp * Math.exp(-age / 550);
     if (a < 0.05) { L.amp = 0; return 0; }
     const env = x < L.px ? x / L.px : (W - x) / (W - L.px);
-    return L.dir * (a * env * Math.sin(age * 0.045) + a * 0.25 * Math.sin(Math.PI * 2 * x / W) * Math.sin(age * 0.09));
+    return L.dir * (a * env * Math.sin(age * 0.03) + a * 0.12 * Math.sin(Math.PI * 2 * x / W) * Math.sin(age * 0.06));
   }
 
   function heat(L, now) {
@@ -994,7 +992,7 @@ function initHero(hero) {
         const ly = baseY(L, x, now);
         if ((m.y - ly) * (y - ly) < 0) {
           const v = clamp(Math.abs(y - m.y) / 40, 0, 1);
-          pluck(L, x, y > m.y ? 1 : -1, 7 + v * 16, now);
+          pluck(L, x, y > m.y ? 1 : -1, 3 + v * 6, now);
         }
       }
     }
